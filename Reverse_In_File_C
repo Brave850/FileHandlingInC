@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+
+
+long count_characters(FILE *);
+
+void main()
+{
+    int i;
+    long cnt;
+    char ch, ch1;
+    FILE *fp1, *fp2,*fp;
+    fp=fopen("Sambit.txt","w");
+    char data[20];
+    scanf("%[^\n]",data);
+    int n=strlen(data);
+    if(fp!=NULL)
+    {
+        int i;
+        for(i=0;i<n;i++)
+        {
+            fputc(data[i],fp);
+        }
+    }
+    fclose(fp);
+    if (fp1 = fopen("Sambit.txt", "r"))
+    {
+   
+        fp2 = fopen("File_2.txt", "w");
+        cnt = count_characters(fp1);
+
+      
+        fseek(fp1, -1L, 2);
+       
+
+        while (cnt)
+        {
+            ch = fgetc(fp1);
+            fputc(ch, fp2);
+            fseek(fp1, -2L, 1); 
+            cnt--;
+        }
+    }
+    else
+    {
+        perror("Error occured\n");
+    }
+    fclose(fp1);
+    fclose(fp2);
+    FILE *fl;
+    fl=fopen("File_2.txt","r");
+    if(fl==NULL)
+    {
+        exit(0);
+    }
+    char d= fgetc(fl);
+    while(d!= EOF )
+    {
+        printf("%c",d);
+        d=fgetc(fl);
+    }
+    fclose(fl);
+}
+
+
+long count_characters(FILE *f)
+{
+    fseek(f, -1L, 2);
+   
+    long last_pos = ftell(f);
+    last_pos++;
+    return last_pos;
+}
